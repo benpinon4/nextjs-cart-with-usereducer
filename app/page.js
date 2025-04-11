@@ -14,7 +14,7 @@ export default function Home() {
       
     <div className="page-container">
       <ShoppingItemList setAddnew={setAddnew} className="product-grid" setCartItemList={setCartItemList} cartItemList={cartItemList} />
-      <ShoppingCart setAddnew={setAddnew} addNew={addNew} cartItemList={cartItemList} className="cart-sidebar" />
+      <ShoppingCart setAddnew={setAddnew} addNew={addNew} setCartItemList={setCartItemList} cartItemList={cartItemList} className="cart-sidebar" />
     </div>
     </div>
   );

@@ -63,7 +63,7 @@ export default function ShoppingItemList(props) {
                       </p>
 
                       <div className="flex items-center justify-between mb-4">
-                        <span className="text-lg font-bold">$49.99</span>
+                        <span className="text-lg font-bold">${item.price.toFixed(2)}</span>
                         <span className="text-sm bg-green-600 text-white px-2 py-1 rounded-full">
                           In Stock
                         </span>

@@ -5,6 +5,7 @@ import { useEffect, useReducer, useState } from "react";
 import cartReducer from "./cartReducer";
 
 export default function ShoppingCart(props) {
+  const setCartItemList = props.setCartItemList
   let cartItemList = props.cartItemList;
   let setAddNew = props.setAddnew
   let addNew = props.addNew
@@ -17,21 +18,14 @@ export default function ShoppingCart(props) {
 
   useEffect(()=>{
     
-    if(cartItemList.length == 0 && cartItemList.length > cartState.cartItemList.length){
-      console.log("No list")
-      // cartItemList = cartState.cartItemList
-    // } else if(cartItemList.length != 0 && cartItemList.length === cartState.cartItemList.length) {
-    //   dispatch({type: "NEW_CART_ITEM_LIST", payload: cartItemList})
-         
-    // } else if(cartItemList.length === 0 && cartItemList.length === cartState.cartItemList.length){
-    } else if( cartState.cartItemList.length >= 0 && !deleted && addNew ){
+ if( cartState.cartItemList.length >= 0 && !deleted && addNew ){
       dispatch({type: "NEW_CART_ITEM_LIST", payload: cartItemList})
       deleted = false
       setAddNew(false)
     }
     
     setCartTotal(cartState.total)
-
+    setCartItemList(cartState.cartItemList)
   },[cartItemList, cartState.total])
 
 
@@ -66,8 +60,11 @@ console.log(cartState.total)
                         <button
                           className="p-3 py-1 text-lg bg-gray-800 text-white rounded hover:bg-gray-700"
                           onClick={()=>{
-                            item.quantity--
-                            dispatch({type: "SUBTRACT_QUANTITY",payload: cartItemList})}}
+                            if(item.quantity > 1){
+                              item.quantity--
+                              dispatch({type: "SUBTRACT_QUANTITY",payload: cartItemList})}}
+                            }
+                            
                         >
                           −
                         </button>
