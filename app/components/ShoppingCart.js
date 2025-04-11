@@ -5,25 +5,31 @@ import { useEffect, useReducer, useState } from "react";
 import cartReducer from "./cartReducer";
 
 export default function ShoppingCart(props) {
-  const cartItemList = props.cartItemList;
-  // const init = (propProducts) => ({
-  //   products: propProducts
-  // });
-  const [cartTotal, setCartTotal] = useState(0)
-  const [cartState, dispatch] = useReducer(cartReducer,{total: cartTotal, cartItemList: []})
+  let cartItemList = props.cartItemList;
+  let setAddNew = props.setAddnew
+  let addNew = props.addNew
 
+
+  const [cartTotal, setCartTotal] = useState(0)
+  const [cartState, dispatch] = useReducer(cartReducer,{action: "", total: cartTotal, cartItemList: []})
+  let deleted = false
   // console.log(cartState)
 
   useEffect(()=>{
+    
     if(cartItemList.length == 0 && cartItemList.length > cartState.cartItemList.length){
       console.log("No list")
+      // cartItemList = cartState.cartItemList
     // } else if(cartItemList.length != 0 && cartItemList.length === cartState.cartItemList.length) {
     //   dispatch({type: "NEW_CART_ITEM_LIST", payload: cartItemList})
          
     // } else if(cartItemList.length === 0 && cartItemList.length === cartState.cartItemList.length){
-    } else if( cartItemList.length != 0 && cartItemList.length != cartState.cartItemList.length){
+    } else if( cartState.cartItemList.length >= 0 && !deleted && addNew ){
       dispatch({type: "NEW_CART_ITEM_LIST", payload: cartItemList})
+      deleted = false
+      setAddNew(false)
     }
+    
     setCartTotal(cartState.total)
 
   },[cartItemList, cartState.total])
@@ -75,7 +81,10 @@ console.log(cartState.total)
                         </button>
                         <button
                           className="px-1 py-1 text-sm bg-red-800 text-white rounded hover:bg-red-700"
-                          onClick={()=>{dispatch({type: "DELETE_CART_ITEM", payload: item.id})}}
+                          onClick={()=>{
+                            
+                            deleted = true
+                            dispatch({type: "DELETE_CART_ITEM", payload: item.id})}}
                         >
                           Remove
                         </button>

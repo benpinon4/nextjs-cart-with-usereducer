@@ -6,6 +6,7 @@ export default function ShoppingItemList(props) {
   const [itemsForPurchase, setItemsForPurchase] = useState(null);
   const setCartList = props.setCartItemList;
   const cartItemList = props.cartItemList
+  let setAddNew = props.setAddnew
   useEffect(() => {
     async function retrieveItemsForPurchase() {
       const response = await fetch("https://fakestoreapi.com/products");
@@ -22,6 +23,7 @@ export default function ShoppingItemList(props) {
     console.log(newCartItem.id)
     console.log(item.id)
     console.log(item.id === newCartItem.id ? console.log(true) : console.log(false))
+    setAddNew(true)
    // setCartList([...cartItemList, newCartItem])
 
     cartItemList.some((item)=>item.id === newCartItem.id) ? 

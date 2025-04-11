@@ -9,23 +9,28 @@ const cartReducer = (state, action) => {
 
   switch (action.type) {
     case "ADD_QUANTITY":
-      return {
+      return { 
+        action: "ADD_QUANTITY",
         total: totalCartItemPrices(action.payload),
         cartItemList: [...action.payload],
       };
     case "SUBTRACT_QUANTITY":
       return {
+        action: "SUBTRACT_QUANTITY",
         total: totalCartItemPrices(action.payload),
         cartItemList: [...action.payload],
       };
     case "NEW_CART_ITEM_LIST":
       return {
+        action: "NEW_CART_ITEM_LIST",
         total: totalCartItemPrices(action.payload),
         cartItemList: [...action.payload],
       };
     case "DELETE_CART_ITEM":
       const updatedList = state.cartItemList.filter(item => item.id !== action.payload)
-      return {total: totalCartItemPrices(updatedList),
+      return {
+        action: "DELETE_CART_ITEM",
+        total: totalCartItemPrices(updatedList),
         cartItemList: [...updatedList],};
     default:
       return state;
