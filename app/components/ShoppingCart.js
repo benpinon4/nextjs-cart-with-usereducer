@@ -1,27 +1,35 @@
-import { useEffect, useReducer } from "react";
+
+
+
+import { useEffect, useReducer, useState } from "react";
 import cartReducer from "./cartReducer";
 
 export default function ShoppingCart(props) {
   const cartItemList = props.cartItemList;
-  const init = (propProducts) => ({
-    products: propProducts
-  });
-  const [cartState, dispatch] = useReducer(cartReducer,{total: 0, cartItemList: []})
-  console.log(cartState)
+  // const init = (propProducts) => ({
+  //   products: propProducts
+  // });
+  const [cartTotal, setCartTotal] = useState(0)
+  const [cartState, dispatch] = useReducer(cartReducer,{total: cartTotal, cartItemList: []})
+
+  // console.log(cartState)
 
   useEffect(()=>{
-    if(cartItemList.length == 0){
+    if(cartItemList.length == 0 && cartItemList.length > cartState.cartItemList.length){
       console.log("No list")
-    } else {
-      console.log("List exists")
-          dispatch({type: "NEW_CART_ITEM_LIST", payload: cartItemList})
+    // } else if(cartItemList.length != 0 && cartItemList.length === cartState.cartItemList.length) {
+    //   dispatch({type: "NEW_CART_ITEM_LIST", payload: cartItemList})
+         
+    // } else if(cartItemList.length === 0 && cartItemList.length === cartState.cartItemList.length){
+    } else if( cartItemList.length != 0 && cartItemList.length != cartState.cartItemList.length){
+      dispatch({type: "NEW_CART_ITEM_LIST", payload: cartItemList})
     }
-    
+    setCartTotal(cartState.total)
 
-  },[cartItemList])
+  },[cartItemList, cartState.total])
 
 
-
+console.log(cartState.total)
 
   return (
     <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 text-white shadow-lg z-50 flex flex-col cart-sidebar">
@@ -51,19 +59,23 @@ export default function ShoppingCart(props) {
                         </p>
                         <button
                           className="p-3 py-1 text-lg bg-gray-800 text-white rounded hover:bg-gray-700"
-                          onClick={()=>{dispatch({type: "SUBTRACT_QUANTITY"})}}
+                          onClick={()=>{
+                            item.quantity--
+                            dispatch({type: "SUBTRACT_QUANTITY",payload: cartItemList})}}
                         >
                           −
                         </button>
                         <button
                           className="px-3 py-1 text-lg bg-gray-800 text-white rounded hover:bg-gray-700"
-                          onClick={()=>{dispatch({type: "ADD_QUANTITY"})}}
+                          onClick={()=>{
+                            item.quantity++
+                            dispatch({type: "ADD_QUANTITY", payload: cartItemList})}}
                         >
                           +
                         </button>
                         <button
                           className="px-1 py-1 text-sm bg-red-800 text-white rounded hover:bg-red-700"
-                          onClick={()=>{dispatch({type: "DELETE_CART_ITEM"})}}
+                          onClick={()=>{dispatch({type: "DELETE_CART_ITEM", payload: item.id})}}
                         >
                           Remove
                         </button>
@@ -88,7 +100,7 @@ export default function ShoppingCart(props) {
       <div className="p-4 border-t border-gray-700">
         <div className="flex justify-between mb-4">
           <span className="text-sm text-gray-400">Subtotal</span>
-          <span className="text-sm font-bold">$89.97</span>
+          <span className="text-sm font-bold">{cartTotal.toFixed(2)}</span>
         </div>
         <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-xl transition-all duration-300">
           Checkout

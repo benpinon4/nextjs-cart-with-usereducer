@@ -1,30 +1,35 @@
-
-
-
 const cartReducer = (state, action) => {
+  function totalCartItemPrices(action) {
+    let total = action.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0);
 
-switch (action.type) {
+    return total;
+  }
+
+  switch (action.type) {
     case "ADD_QUANTITY":
-        // console.log(action.payload[0])
-        console.log("in reducer")
-        return {total: 0,
-                cartItemList: [action.payload]
-        }
+      return {
+        total: totalCartItemPrices(action.payload),
+        cartItemList: [...action.payload],
+      };
     case "SUBTRACT_QUANTITY":
-        console.log("in reducer subtract")
-        return state
+      return {
+        total: totalCartItemPrices(action.payload),
+        cartItemList: [...action.payload],
+      };
     case "NEW_CART_ITEM_LIST":
-        console.log("in reducer subtract")
-        return {total: 0,
-            cartItemList: [action.payload]
-    }
+      return {
+        total: totalCartItemPrices(action.payload),
+        cartItemList: [...action.payload],
+      };
     case "DELETE_CART_ITEM":
-        console.log("in reducer delete")
-        return state
+      const updatedList = state.cartItemList.filter(item => item.id !== action.payload)
+      return {total: totalCartItemPrices(updatedList),
+        cartItemList: [...updatedList],};
     default:
-        return state
-}
+      return state;
+  }
+};
 
-}
-
-export default cartReducer
+export default cartReducer;
